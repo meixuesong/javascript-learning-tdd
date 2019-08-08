@@ -116,13 +116,11 @@ describe('Function', function () {
     expect(max(array[0], array[1])).toEqual(2);
   });
 
-  // it('use spread operator to copy fields', function () {
-  //   const sam = {first: 'Sam', age: 20};
-  //   // let sam2 = Object.assign(sam, {age: 3, height: 100});
-  //   // let sam2 = Object.assign({...sam, age: 3, height: 100});
-  //   let sam2 = {...sam, age: 3, height: 100};
-  //
-  //   expect(sam2).toEqual({first: 'Sam', age: 3, height: 100});
-  // });
+  it('use spread operator to copy fields', function () {
+    const sam = {first: 'Sam', age: 20};
+    let sam2 = {...sam, age: 3, height: 100};
+
+    expect(sam2).toEqual({first: 'Sam', age: 3, height: 100});
+  });
 
 });
