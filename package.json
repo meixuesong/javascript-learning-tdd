@@ -1,0 +1,28 @@
+{
+  "name": "my-first-js-tdd",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test:unit": "export NODE_ENV=test; dotenv mocha -- 'test/**/*.test.js' --require babel-register",
+    "test:coverage": "nyc --reporter=html --reporter=text yarn run test:unit"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-rewire": "^1.2.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "dotenv-cli": "^2.0.1",
+    "dotenv-export": "^2.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "expect": "^24.8.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1"
+  }
+}
