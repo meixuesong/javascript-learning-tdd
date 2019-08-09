@@ -11,7 +11,7 @@ describe('Function', function () {
 
   it('should declare a function', function () {
     function square(x) {
-      return x* x;
+      return x * x;
     }
 
     expect(square(2)).toBe(4);
@@ -49,6 +49,24 @@ describe('Function', function () {
     }
 
     expect(power(3)).toBe(9);
+  });
+
+  it('default parameter, undefined', () => {
+    function add(a, b = 10, c) {
+      return a + b + c;
+    }
+
+    expect(add(1, 2, 3)).toEqual(6);
+    expect(add(1, undefined, 2)).toEqual(13);
+    expect(add(1, null, 2)).toEqual(3);
+  });
+
+  it('expression as default parameter value', () => {
+    function hello(name, time = new Date()) {
+      return `Hello ${name}, ${time}`;
+    }
+
+    expect(hello('A')).toContain('GMT+0800');
   });
 
   it('should support closure 1', function () {
@@ -123,4 +141,75 @@ describe('Function', function () {
     expect(sam2).toEqual({first: 'Sam', age: 3, height: 100});
   });
 
+});
+
+describe('Arrow Functions', function () {
+  it('from anonymous to arrow function', function () {
+    function sqr(n) {
+      return n * n;
+    }
+
+    expect(sqr(3)).toEqual(9);
+
+    const sqr2 = (n) => n * n;
+    expect(sqr2(3)).toEqual(9);
+
+    const arrow3 = () => 6;
+    expect(arrow3()).toEqual(6);
+  });
+
+  it('dropping the parentheses when only 1 parameter', function () {
+    const sqr = n => n * n;
+    expect(sqr(2)).toEqual(4);
+  });
+
+  it('arrow function vs anonymous function, lexical scope', function () {
+    //两者r 区别：
+    //anonymous function对this和arguments不是lexical scope
+    this.stuff = 'from lexical scope';
+    const someValue = 4;
+    const self = this;
+
+    // setTimeout(function () {
+    //   console.log('someValue is ' + someValue); //4
+    //   console.log('this...' + this.stuff); //undefined
+    //   console.log('self...' + self.stuff); //from lexical scope
+    // }, 50);
+
+    (function() {
+      expect(someValue).toEqual(4);
+      expect(this).toBeUndefined();
+      expect(self.stuff).toEqual('from lexical scope');
+    })();
+
+    // setTimeout(() => {
+    //   console.log('someValue is ' + someValue); //4
+    //   console.log('this...' + this.stuff); //from lexical scope
+    //   console.log('self...' + self.stuff); //from lexical scope
+    // }, 50);
+
+    (()=>{
+      expect(someValue).toEqual(4);
+      expect(this.stuff).toEqual('from lexical scope');
+      expect(self.stuff).toEqual('from lexical scope');
+    })();
+
+  });
+
+});
+
+describe('bind, call, apply', function () {
+  it('bind', function () {
+    const greet = function (message, name) {
+      return message + ' ' + name;
+    }
+    //bind的第n+1个参数绑定function的第n个参数
+    //bind的第1个参数绑定function的this,
+    const sayHi = greet.bind(null, 'hi');
+    expect(sayHi('Joe')).toEqual('hi Joe');
+
+    const greet2 = (message, name) => message + ' ' + name;
+    const sayHi2 = greet2.bind(null, 'hi'); //对箭头函数，会忽略第1个参数
+    expect(sayHi2('Jason')).toEqual('hi Jason');
+  });
 });
