@@ -72,6 +72,16 @@ describe('The secret life of object', function () {
     expect(temp.celsius).toBeCloseTo(21.11, 2);
   });
 
+  it('static method', function () {
+    class Car {
+      static get ageFactor() {
+        return 0.1;
+      }
+    }
+
+    expect(Car.ageFactor).toEqual(0.1);
+  });
+
   it('should support extends', function () {
     class Parent {
       constructor(x) {
@@ -98,5 +108,78 @@ describe('The secret life of object', function () {
     expect(child.x).toEqual(30);
 
     expect(child instanceof Parent).toBeTruthy();
+  });
+});
+
+describe('Class expressions', function () {
+  it('create class', function () {
+    const createClass = function (...fields) {
+      return class {
+        constructor(...values) {
+          fields.forEach((field, index) => this[field] = values[index]);
+        }
+      }
+    }
+
+    const Book = createClass('title', 'subtitle', 'pages');
+    const book = new Book('A', 'B', 30);
+
+    expect(book.title).toEqual('A');
+    expect(book.subtitle).toEqual('B');
+    expect(book.pages).toEqual(30);
+  });
+});
+
+describe('new build-in classes: Set, Map, WeakSet, WeakMap', function () {
+  it('Set', function () {
+    const set = new Set(['A', 'b', 'c', 'A']);
+    expect(set.size).toEqual(3);
+
+    set.add('B');
+    expect(set.size).toEqual(4);
+  });
+
+  it('Map', function () {
+    const scores = new Map([['A', 10], ['B', 9]]);
+    scores.set('B', 8);
+    scores.set('C', 20);
+
+    expect(scores.size).toEqual(3);
+    expect(scores.get('B')).toEqual(8);
+  });
+});
+
+describe('Prototypal Inheritance', function () {
+  it('prototype chain', function () {
+    class Counter {}
+
+    const counter1 = new Counter();
+    const counter2 = new Counter();
+
+    const counter1Prototype = Reflect.getPrototypeOf(counter1);
+    const counter2Prototype = Reflect.getPrototypeOf(counter2);
+
+    expect(counter1).not.toBe(counter2);
+    expect(counter1Prototype).toBe(counter2Prototype);
+  });
+
+  it('getter & setter behaviour', function () {
+    class Counter {}
+    Counter.prototype.count = 0;
+    Counter.prototype.increment = function() {this.count += 1;};
+
+    const counter1 = new Counter();
+    const counter2 = new Counter();
+
+    counter1.increment();
+
+    expect(counter1.count).toEqual(1);
+    expect(counter2.count).toEqual(0);
+
+    //prototpye是用代理的方式，对getter和setter的处理不一样：
+    //getter: 属性查找路径：object -> class prototype -> class prototype' prototype...
+    //setter: 如果object没有属性，在object增加属性。
+    expect(Object.keys(counter1)).toContain('count');
+    expect(Object.keys(counter2)).not.toContain('count');
   });
 });
