@@ -4,11 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test:unit": "export NODE_ENV=test; dotenv mocha -- 'test/**/*.test.js' --require babel-register",
+    "test:unit": "mocha  --require @babel/register 'test/**/*.test.js'",
     "test:coverage": "nyc --reporter=html --reporter=text yarn run test:unit"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
